@@ -96,6 +96,7 @@ fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier)
                     navController.navigate("welcome")
                 },
                 enabled = formularioValido,
+
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Login")
