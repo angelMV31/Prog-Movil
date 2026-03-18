@@ -14,6 +14,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +34,14 @@ import com.example.loginviewhome.ui.theme.LoginViewHomeTheme
 
 @Composable
 fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+
+    var user by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    val userValido = user.isNotEmpty()
+    val passwordValido = password.isNotEmpty()
+
+    val formularioValido = userValido && passwordValido
 
     Box(
         modifier = modifier
@@ -60,18 +72,20 @@ fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier)
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = user,
+                onValueChange = {user = it},
                 label = { Text("User") },
+                isError = user.isEmpty(),
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = password,
+                onValueChange = {password = it},
                 label = { Text("Password") },
+                isError = password.isEmpty(),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -81,6 +95,7 @@ fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier)
                 onClick = {
                     navController.navigate("welcome")
                 },
+                enabled = formularioValido,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Login")

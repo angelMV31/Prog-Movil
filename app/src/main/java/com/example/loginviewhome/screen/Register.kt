@@ -13,6 +13,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +30,19 @@ import com.example.loginviewhome.ui.theme.LoginViewHomeTheme
 
 @Composable
 fun Register(navController: NavHostController, modifier: Modifier = Modifier) {
+
+    var user by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
+
+    val nombreValido = user.matches(Regex("^[a-zA-Z ]+$"))
+    val telefonoValido = telefono.matches(Regex("^\\d{10}$"))
+    val correoValido = android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()
+    val passwordsIguales = password == confirmPassword && password.isNotEmpty()
+
+    val formularioValido = nombreValido && telefonoValido && correoValido && passwordsIguales
 
     Box(
         modifier = modifier
@@ -48,26 +65,36 @@ fun Register(navController: NavHostController, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = user,
+                onValueChange = {user = it},
                 label = { Text("User") },
+                isError = user.isNotEmpty() && !nombreValido,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = correo,
+                onValueChange = {correo = it},
+                label = { Text("Correo") },
+                isError = correo.isNotEmpty() && !correoValido,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = telefono,
+                onValueChange = { telefono = it },
                 label = { Text("Teléfono") },
+                isError = telefono.isNotEmpty() && !telefonoValido,
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = password,
+                onValueChange = {password = it},
                 label = { Text("Password") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -75,9 +102,10 @@ fun Register(navController: NavHostController, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = confirmPassword,
+                onValueChange = {confirmPassword = it},
                 label = { Text("ConfirmPassword") },
+                isError = confirmPassword.isNotEmpty() && !passwordsIguales,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -87,6 +115,7 @@ fun Register(navController: NavHostController, modifier: Modifier = Modifier) {
                 onClick = {
                     navController.navigate("welcome")
                 },
+                enabled = formularioValido,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Sign Up Using")
