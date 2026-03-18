@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.loginviewhome.screen.Greeting
 import com.example.loginviewhome.screen.LoginScreen
+import com.example.loginviewhome.screen.MainScreen
 import com.example.loginviewhome.screen.Register
 
 
@@ -13,7 +14,7 @@ import com.example.loginviewhome.screen.Register
 fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "welcome"
+        startDestination = "main"
     ) {
         composable("welcome") {
             Greeting(navController)
@@ -23,6 +24,9 @@ fun AppNavigation(navController: NavHostController) {
         }
         composable("register") {
             Register(navController)
+        }
+        composable("main"){
+            MainScreen(navController)
         }
     }
 }
